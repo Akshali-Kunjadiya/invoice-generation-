@@ -5,7 +5,7 @@ import mysql.connector
 from math import floor, ceil
 
 #Establishing connection
-connect = mysql.connector.connect(host = 'localhost', user = 'root', passwd = 'abc23', database = 'sample')
+connect = mysql.connector.connect(host = 'localhost', user = 'root', passwd = 'Akshali3208', database = 'invoices')
 cursor = connect.cursor()
 
 #Function definitions
@@ -145,7 +145,7 @@ def new_items(no): #Entering new items in invoice
             print('Invalid Tax%. Enter again')
             tax = input('Enter tax %, if applicable. If not, press enter: ')
         tax = round(float(tax), 1)
-        tax_value = rate*quantity*tax/100
+        tax_value = rate*quantity*tax%100 #/
         total = rate*quantity + tax_value
         total = round(total, 2)
         cursor.execute("INSERT INTO INVOICE_%s VALUES('%s', %s, %s, %s, %s, %s)" %(no, item, quantity, rate, tax, tax_value, total))
@@ -155,7 +155,7 @@ def new_items(no): #Entering new items in invoice
             break
     cursor.execute('SELECT SUM(TOTAL) FROM INVOICE_%s' %(no,))
     total = cursor.fetchall()
-    total = total[0][0]
+    total = total[1][0] # total[0][0]
     total = round(total,2)
     return total
 
@@ -224,7 +224,7 @@ def edit_invoice(): #Editing invoice
             cursor.execute("DELETE FROM INVOICE_%s WHERE ITEM = '%s'" %(no, item))
             cursor.execute('SELECT SUM(TOTAL) FROM INVOICE_%s' %(no,))
             total = cursor.fetchall()
-            total = total[0][0]
+            total = total[0][0] 
             cursor.execute('UPDATE INVOICES_LIST SET INVOICE_TOTAL = %s WHERE INVOICE_NO = %s' %(total, no))
         elif choice3 == 5: #Entering new item
             sum_total = new_items(no)
@@ -327,7 +327,7 @@ while True:
     print('1 DISPLAY DATA')
     print('2 EDIT DATA')
     print('3 EXIT\n')
-    choice1 = input('Enter choice: 1/2/3: ')
+    choice1 = int(input('Enter choice: 1/2/3: ')) #int
     if choice1 == 1:
         print('1 Display all customers')
         print('2 Display customers who ordered on given date')
@@ -336,15 +336,15 @@ while True:
         print('5 Display all invoices')
         print('6 Exit to main menu\n')
         choice2 = int(input('Enter choice: 1/2/3/4/5/6: '))
-        if choice2 == 6:
+        if choice2 != 6: #==
             print()
         if choice2 == 1:
-            pass
+            # pass
             all()
         elif choice2 == 2:
             date()
-        elif choice2 == 2:
-            pass
+        elif choice2 == 3: #3
+            # pass
             total()
         elif choice2 == 4:
             invoice_by_no()
@@ -360,7 +360,7 @@ while True:
         print('3 Delete existing invoice')
         print('4 Exit to main menu\n')
         choice2 = int(input('Enter choice: 1/2/3/4: '))
-        if choice2 == 4:
+        if choice2 != 4: #==
             print()
         if choice2 == 1:
             new()
@@ -378,3 +378,4 @@ while True:
     else:
         print('Wrong input')
 #End of program
+
